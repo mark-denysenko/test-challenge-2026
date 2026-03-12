@@ -41,18 +41,11 @@ builder.Services.AddSwaggerGen(options =>
 
 WebApplication app = builder.Build();
 
-// Apply pending migrations on startup (skip for InMemory provider used in tests)
+// Apply pending migrations on startup
 using (IServiceScope scope = app.Services.CreateScope())
 {
-    HashDbContext dbContext = scope.ServiceProvider.GetRequiredService<HashDbContext>();
-    if (dbContext.Database.IsRelational())
-    {
-        await dbContext.Database.MigrateAsync().ConfigureAwait(false);
-    }
-    else
-    {
-        await dbContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
-    }
+    IHashRepository repository = scope.ServiceProvider.GetRequiredService<IHashRepository>();
+    await repository.MigrateAsync().ConfigureAwait(false);
 }
 
 // Middleware

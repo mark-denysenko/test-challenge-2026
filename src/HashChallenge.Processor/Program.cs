@@ -27,28 +27,4 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
-// Wait for DB schema to be ready (migrations are applied by the API service)
-using (IServiceScope scope = host.Services.CreateScope())
-{
-    HashDbContext dbContext = scope.ServiceProvider.GetRequiredService<HashDbContext>();
-    int retries = 30;
-    while (retries > 0)
-    {
-        try
-        {
-            await dbContext.Database.CanConnectAsync().ConfigureAwait(false);
-            bool tableExists = await dbContext.Database
-                .ExecuteSqlRawAsync("SELECT 1 FROM hashes LIMIT 0")
-                .ConfigureAwait(false) >= 0;
-            break;
-        }
-        catch
-        {
-            retries--;
-            if (retries == 0) throw;
-            await Task.Delay(2000).ConfigureAwait(false);
-        }
-    }
-}
-
 await host.RunAsync().ConfigureAwait(false);

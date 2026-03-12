@@ -33,4 +33,16 @@ public sealed class HashRepository : IHashRepository
             .ToListAsync(ct)
             .ConfigureAwait(false);
     }
+
+    public async Task MigrateAsync(CancellationToken ct = default)
+    {
+        if (_dbContext.Database.IsRelational())
+        {
+            await _dbContext.Database.MigrateAsync(ct).ConfigureAwait(false);
+        }
+        else
+        {
+            await _dbContext.Database.EnsureCreatedAsync(ct).ConfigureAwait(false);
+        }
+    }
 }
