@@ -66,7 +66,7 @@ public sealed class RabbitMqHashPublisher : IHashPublisher, IDisposable
                 body: body);
         }
 
-        _channel.WaitForConfirmsOrDie(TimeSpan.FromSeconds(30));
+        _channel.WaitForConfirmsOrDie(TimeSpan.FromSeconds(_settings.ConfirmTimeoutSeconds));
 
         _logger.LogInformation("Published {Count} hashes to queue {Queue}", hashes.Count, _settings.QueueName);
 

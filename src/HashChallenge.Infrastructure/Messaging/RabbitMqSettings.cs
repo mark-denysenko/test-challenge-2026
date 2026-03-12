@@ -2,17 +2,19 @@ namespace HashChallenge.Infrastructure.Messaging;
 
 public sealed class RabbitMqSettings
 {
-    public string Host { get; set; } = "localhost";
+    public string Host { get; set; } = string.Empty;
 
-    public int Port { get; set; } = 5672;
+    public int Port { get; set; }
 
-    public string Username { get; set; } = "guest";
+    public string Username { get; set; } = string.Empty;
 
-    public string Password { get; set; } = "guest";
+    public string Password { get; set; } = string.Empty;
 
-    public string QueueName { get; set; } = "hash-queue";
+    public string QueueName { get; set; } = string.Empty;
 
-    public ushort PrefetchCount { get; set; } = 4;
+    public ushort PrefetchCount { get; set; }
 
-    public int Concurrency { get; set; } = 4;
+    public int Concurrency { get; set; }
+
+    public int ConfirmTimeoutSeconds { get; set; } = 30;
 }
